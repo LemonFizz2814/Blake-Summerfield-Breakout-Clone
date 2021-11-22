@@ -7,10 +7,11 @@ public class BallScript : MonoBehaviour
     [SerializeField] float ballSpeed;
     [SerializeField] float startRotateAngle;
     Rigidbody rgBody;
+    PlayerScript playerScript;
 
     bool canMove = false;
 
-    private void Start()
+    private void Awake()
     {
         rgBody = GetComponent<Rigidbody>();
         rgBody.isKinematic = true;
@@ -24,19 +25,45 @@ public class BallScript : MonoBehaviour
         }
     }
 
-    public void RotateBall(Vector3 _colliderPos)
+    //when ball bounces of paddle
+    public void BounceOffPaddle(Vector3 _colliderPos)
     {
-        //rotate ball in opposite direction
+        //ball bounces in opposite direction to the centre of paddle so player can aim ball
         transform.up = -_colliderPos + transform.position;
+    }
+
+    //when ball bounces off boundary or brick or other objects
+    public void BounceOffObject(ContactPoint _contact)
+    {
+        //reflect at an appropriate angle 
+        transform.up = Vector3.Reflect(transform.up, _contact.normal);
     }
 
     public void StartGame()
     {
-        canMove = true;
-        transform.parent = null;
+        FreezeBall(false);
+        transform.SetParent(null);
         transform.localEulerAngles = new Vector3(0, 0, Random.Range(-startRotateAngle, startRotateAngle));
-        //transform.localScale = new Vector3(1, 1, 1);
-        rgBody.isKinematic = false;
+    }
+
+    public void FreezeBall(bool _active)
+    {
+        canMove = !_active;
+        rgBody.isKinematic = _active;
+    }
+
+    public void SetPlayerScript(PlayerScript _playerScript)
+    {
+        playerScript = _playerScript;
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        //ball exited into red zone
+        if(other.gameObject.CompareTag("OutOfBounds"))
+        {
+            playerScript.RespawnBall();
+        }
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -45,13 +72,14 @@ public class BallScript : MonoBehaviour
         if(collision.gameObject.CompareTag("Boundary"))
         {
             //bounce ball off wall
-            RotateBall(collision.contacts[0].point);
+            //RotateBall(collision.contacts[0].point);
+            BounceOffObject(collision.contacts[0]);
         }
         //if ball hits brick
         if(collision.gameObject.CompareTag("Brick"))
         {
             //bounce ball off brick
-            RotateBall(collision.contacts[0].point);
+            BounceOffObject(collision.contacts[0]);
             collision.gameObject.GetComponent<BrickScript>().CollideWithBall();
         }
     }

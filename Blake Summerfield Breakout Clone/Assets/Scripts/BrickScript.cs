@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class BrickScript : MonoBehaviour
 {
-    [SerializeField] UIManager uiManager;
+    BrickManager brickManager;
     SpriteRenderer spriteRenderer;
     Color32 brickColour;
 
@@ -14,6 +14,11 @@ public class BrickScript : MonoBehaviour
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
         spriteRenderer.color = brickColour;
+    }
+
+    public void SetBrickManager(BrickManager _brickManager)
+    {
+        brickManager = _brickManager;
     }
 
     public void SetBrickColour(Color32 _color)
@@ -28,7 +33,7 @@ public class BrickScript : MonoBehaviour
 
     public void CollideWithBall()
     {
-        //uiManager.UpdateScore(brickPoints);
+        brickManager.BrickDestroyed(brickPoints);
         Destroy(gameObject);
     }
 }
