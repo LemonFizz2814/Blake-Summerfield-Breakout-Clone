@@ -43,7 +43,7 @@ public class BrickManager : MonoBehaviour
     void CheckIfAllBricksDestroyed()
     {
         //check if there aren't any bricks left
-        if(GameObject.FindGameObjectsWithTag("Brick").Length == 0)
+        if(GameObject.FindGameObjectsWithTag("Brick").Length <= 1)
         {
             //spawn in a fresh set of bricks
             GenerateBricks();

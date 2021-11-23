@@ -39,10 +39,12 @@ public class BallScript : MonoBehaviour
         transform.up = Vector3.Reflect(transform.up, _contact.normal);
     }
 
+    //when play presses space
     public void StartGame()
     {
         FreezeBall(false);
         transform.SetParent(null);
+        //pick a random angle on start
         transform.localEulerAngles = new Vector3(0, 0, Random.Range(-startRotateAngle, startRotateAngle));
     }
 
@@ -72,7 +74,6 @@ public class BallScript : MonoBehaviour
         if(collision.gameObject.CompareTag("Boundary"))
         {
             //bounce ball off wall
-            //RotateBall(collision.contacts[0].point);
             BounceOffObject(collision.contacts[0]);
         }
         //if ball hits brick
