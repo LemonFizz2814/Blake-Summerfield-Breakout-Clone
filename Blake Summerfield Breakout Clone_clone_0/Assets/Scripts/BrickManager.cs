@@ -4,14 +4,20 @@ using UnityEngine;
 
 public class BrickManager : MonoBehaviour
 {
+    int level = 0;
+
     [SerializeField] UIManager uiManager;
     [SerializeField] GameObject brickPrefab;
 
     [SerializeField] int bricksPerRow;
     [SerializeField] int amountOfRows;
+
     [SerializeField] float rowVertSpacing;
     [SerializeField] float brickHorizSpacing;
+
     [SerializeField] Vector2 startingPos;
+
+    [SerializeField] GameObject[] brickLayout;
 
     [SerializeField] List<Color32> colourList = new List<Color32>();
 
@@ -23,7 +29,7 @@ public class BrickManager : MonoBehaviour
             Debug.LogError("Warning! colour list length isn't equal to the amount of rows");
         }
 
-        GenerateBricks();
+        //GenerateBricks();
     }
 
     void GenerateBricks()
@@ -45,6 +51,7 @@ public class BrickManager : MonoBehaviour
         //check if there aren't any bricks left
         if(GameObject.FindGameObjectsWithTag("Brick").Length <= 1)
         {
+            print("length " + GameObject.FindGameObjectsWithTag("Brick").Length);
             //spawn in a fresh set of bricks
             GenerateBricks();
         }

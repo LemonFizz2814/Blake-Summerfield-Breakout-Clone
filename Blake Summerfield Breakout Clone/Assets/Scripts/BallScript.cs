@@ -10,9 +10,11 @@ public class BallScript : NetworkBehaviour
 
     [SyncVar] float startRot;
     Rigidbody rgBody;
-    PlayerScript playerScript;
+    [SyncVar] PlayerScript playerScript;
 
     bool canMove = false;
+
+    [SyncVar] int ballNum;
 
     private void Awake()
     {
@@ -20,11 +22,35 @@ public class BallScript : NetworkBehaviour
         rgBody.isKinematic = true;
     }
 
+    private void Start()
+    {
+        ballNum = System.Array.IndexOf(GameObject.FindGameObjectsWithTag("Ball"), gameObject);
+
+        /*foreach(GameObject playerObj in GameObject.FindGameObjectsWithTag("Player"))
+        {
+            if(playerObj.GetComponent<PlayerScript>().GetPlayerNum() == ballNum)
+            {
+                print(playerObj.GetComponent<PlayerScript>().GetPlayerNum() + " with " + ballNum);
+                SetPlayerScript(playerObj.GetComponent<PlayerScript>());
+            }
+        }*/
+
+        if(playerScript == null)
+        {
+            print("COMMMMMEEEE ONNNNNNNNNNNNNN");
+        }
+    }
+
     void Update()
     {
         if (canMove)
         {
-            rgBody.velocity = transform.up * ballSpeed;
+            //rgBody.velocity = transform.up * ballSpeed;
+        }
+
+        if(!isServer && !canMove)
+        {
+            //transform.position = playerScript.transform.position;
         }
     }
 
@@ -64,9 +90,12 @@ public class BallScript : NetworkBehaviour
         rgBody.isKinematic = _active;
     }
 
+    [ClientRpc]
     public void SetPlayerScript(PlayerScript _playerScript)
     {
+        print("command");
         playerScript = _playerScript;
+        playerScript.SetBall(gameObject);
     }
 
     private void OnTriggerEnter(Collider other)
@@ -74,7 +103,7 @@ public class BallScript : NetworkBehaviour
         //ball exited into red zone
         if(other.gameObject.CompareTag("OutOfBounds"))
         {
-            playerScript.RespawnBall();
+            playerScript.RespawnBallCmd();
         }
     }
 

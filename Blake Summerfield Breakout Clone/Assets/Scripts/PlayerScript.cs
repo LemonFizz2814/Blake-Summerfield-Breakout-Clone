@@ -10,7 +10,7 @@ public class PlayerScript : NetworkBehaviour
     [SerializeField] float xAxisBoundary;
     [SerializeField] float playerHeightOffset;
 
-    int playerNum;
+    [SyncVar] int playerNum;
 
     GameObject ballObject;
 
@@ -23,13 +23,33 @@ public class PlayerScript : NetworkBehaviour
     {
         Screen.SetResolution(1920, 1080, FullScreenMode.FullScreenWindow);
 
-        playerNum = GameObject.FindGameObjectsWithTag("Player").Length - 1;
+        playerNum = System.Array.IndexOf(GameObject.FindGameObjectsWithTag("Player"), gameObject);
+
+        print("playerNum " + playerNum);
 
         transform.position = new Vector3(transform.position.x, transform.position.y + (playerNum * playerHeightOffset), transform.position.z);
 
+        SpawnBallCmd();
+    }
+
+    [Command]
+    void SpawnBallCmd()
+    {
+        print("spawn");
         ballObject = Instantiate(ballPrefab, new Vector3(0, 0, 0), Quaternion.identity);
+        NetworkServer.Spawn(ballObject);
         ballObject.GetComponent<BallScript>().SetPlayerScript(this);
-        RespawnBall();
+    }
+
+    public int GetPlayerNum()
+    {
+        return playerNum;
+    }
+
+    public void SetBall(GameObject _ballObject)
+    {
+        ballObject = _ballObject;
+        RespawnBallCmd();
     }
 
     private void Update()
@@ -75,8 +95,17 @@ public class PlayerScript : NetworkBehaviour
         }
     }
 
-    public void RespawnBall()
+    [Command]
+    public void RespawnBallCmd()
     {
+        RespawnBallClnt();
+    }
+
+
+    [ClientRpc]
+    public void RespawnBallClnt()
+    {
+        print("respawn");
         ballObject.GetComponent<BallScript>().FreezeBall(true);
         ballObject.transform.position = ballSpawnPos.transform.localPosition;
         ballObject.transform.SetParent(transform, false);
