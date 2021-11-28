@@ -12,26 +12,29 @@ public class UIManager : NetworkBehaviour
 
     private void Start()
     {
+        //set resolution
         Screen.SetResolution(1920, 1080, FullScreenMode.FullScreenWindow);
 
-        UpdateText();
+        UpdateScoreText();
     }
 
+    //update score value
     public void UpdateScore(int _points)
     {
         score += _points;
-        UpdateText();
+        UpdateScoreText();
     }
 
-    void UpdateText()
+    //update score ui text
+    void UpdateScoreText()
     {
         scoreText.text = "Score: " + score;
     }
 
+    //hook for score
     void SetScore(int _oldPoints, int _points)
     {
         score = _points;
-        UpdateText();
-        print("set");
+        UpdateScoreText();
     }
 }

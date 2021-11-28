@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
 
-public class BrickManager : NetworkManager
+public class BrickManager : NetworkBehaviour
 {
     int level = 0;
 
@@ -31,15 +31,17 @@ public class BrickManager : NetworkManager
         StartCoroutine(GenerateBricks(0));
     }
 
+    //Spawn in bricks
     private IEnumerator GenerateBricks(float _waitTime)
     {
         yield return new WaitForSeconds(_waitTime);
 
+        //if using prefab
         if (isBrickPrefab)
         {
             Instantiate(brickLayout[level], new Vector3(0, 0, 0), Quaternion.identity);
         }
-        else
+        else //if using auto generator
         {
             for (int i = 0; i < amountOfRows; i++)
             {
@@ -52,17 +54,18 @@ public class BrickManager : NetworkManager
         }
     }
 
+    //check if all bricks in scene have been destroyed
     void CheckIfAllBricksDestroyed()
     {
         //check if there aren't any bricks left
         if(GameObject.FindGameObjectsWithTag("Brick").Length <= 1)
         {
-            print("length " + GameObject.FindGameObjectsWithTag("Brick").Length);
             //spawn in a fresh set of bricks
             StartCoroutine(GenerateBricks(brickSpawnWait));
         }
     }
 
+    //When brick object is destroyed
     public void BrickDestroyed(int _points)
     {
         CheckIfAllBricksDestroyed();

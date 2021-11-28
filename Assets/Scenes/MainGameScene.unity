@@ -157,8 +157,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -240.02075, y: -54.7157}
-  m_SizeDelta: {x: 428.6212, y: 63.9082}
+  m_AnchoredPosition: {x: -280.22937, y: -54.7157}
+  m_SizeDelta: {x: 509.0385, y: 63.9082}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &19786139
 MonoBehaviour:
@@ -182,15 +182,15 @@ MonoBehaviour:
       m_Calls: []
   m_text: Press R to restart
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 191258272f5a2474baf811b834127bd0, type: 2}
-  m_sharedMaterial: {fileID: 474007176848441675, guid: 191258272f5a2474baf811b834127bd0, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 87709c93ae90db34aa0f9cc64451bf38, type: 2}
+  m_sharedMaterial: {fileID: 6250133015081158881, guid: 87709c93ae90db34aa0f9cc64451bf38, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294967295
-  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
+    rgba: 4278190080
+  m_fontColor: {r: 0, g: 0, b: 0, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -316,15 +316,15 @@ MonoBehaviour:
       m_Calls: []
   m_text: 'Score: 000'
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 191258272f5a2474baf811b834127bd0, type: 2}
-  m_sharedMaterial: {fileID: 474007176848441675, guid: 191258272f5a2474baf811b834127bd0, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 87709c93ae90db34aa0f9cc64451bf38, type: 2}
+  m_sharedMaterial: {fileID: 6250133015081158881, guid: 87709c93ae90db34aa0f9cc64451bf38, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294967295
-  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
+    rgba: 4278190080
+  m_fontColor: {r: 0, g: 0, b: 0, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -404,7 +404,6 @@ GameObject:
   - component: {fileID: 343061892}
   - component: {fileID: 343061891}
   - component: {fileID: 343061895}
-  - component: {fileID: 343061894}
   m_Layer: 0
   m_Name: NetworkManager
   m_TagString: Untagged
@@ -493,20 +492,6 @@ MonoBehaviour:
   playerSpawnMethod: 1
   spawnPrefabs:
   - {fileID: 6938499597616393523, guid: 251b3a92df02a7a459874e5fd6769226, type: 3}
---- !u!114 &343061894
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 343061889}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 203501fe31079594f8197ff91971447a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  syncMode: 0
-  syncInterval: 0.1
 --- !u!114 &343061895
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -581,7 +566,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: -1
-  m_Sprite: {fileID: 21300000, guid: 650732ab8d328a84399dca23e46fa87c, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 3d9fd55ad36c6bd439abf2ce27314d0e, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -1111,6 +1096,7 @@ GameObject:
   - component: {fileID: 2134721347}
   - component: {fileID: 2134721348}
   - component: {fileID: 2134721349}
+  - component: {fileID: 2134721350}
   m_Layer: 0
   m_Name: BrickManager
   m_TagString: BrickManager
@@ -1174,3 +1160,28 @@ MonoBehaviour:
   visible: 0
   m_AssetId: 
   hasSpawned: 0
+--- !u!114 &2134721350
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2134721346}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b0fecffa3f624585964b0d0eb21b18e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Port: 7777
+  DualMode: 1
+  NoDelay: 1
+  Interval: 10
+  Timeout: 10000
+  FastResend: 2
+  CongestionWindow: 0
+  SendWindowSize: 4096
+  ReceiveWindowSize: 4096
+  NonAlloc: 1
+  debugLog: 0
+  statisticsGUI: 0
+  statisticsLog: 0

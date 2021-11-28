@@ -18,17 +18,20 @@ public class BrickScript : NetworkBehaviour
         gameObject.SetActive(isActive);
     }
 
+    //set reference to the brick manager script
     public void SetBrickManager(BrickManager _brickManager)
     {
         brickManager = _brickManager;
     }
 
+    //if brick collides with a ball object
     public void CollideWithBall()
     {
         brickManager.BrickDestroyed(brickPoints);
         SetVisible(isActive, false);
     }
 
+    //set the brick to visible
     public void SetVisible(bool _old, bool _new)
     {
         isActive = _new;

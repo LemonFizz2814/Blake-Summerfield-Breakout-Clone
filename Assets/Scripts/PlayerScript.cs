@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.SceneManagement;
 using UnityEngine;
+using UnityEngine.Networking;
 using Mirror;
 
 public class PlayerScript : NetworkBehaviour
@@ -25,51 +26,14 @@ public class PlayerScript : NetworkBehaviour
 
         SpawnBallCmd();
 
-        //print("playerNum " + playerNum);
-        playerNum = GameObject.FindGameObjectsWithTag("Player").Length;
+        playerNum = GameObject.FindGameObjectsWithTag("Player").Length - 1;
         transform.position = new Vector3(transform.position.x, transform.position.y + (playerNum * playerHeightOffset), transform.position.z);
-
-        if (ballObject == null)
-        {
-            print("ballObject is null-------------------");
-        }
-        else
-        {
-            print("ballObject populated");
-        }
     }
-
-    [Command]
-    void SpawnBallCmd()
-    {
-        print("spawn");
-        GameObject _obj = Instantiate(ballPrefab, new Vector3(0, 0, 0), Quaternion.identity);
-        NetworkServer.Spawn(_obj);
-        SetBall(_obj, _obj);
-        ballObject.GetComponent<BallScript>().SetPlayerScript(null, this);
-    }
-
-    public void SetBall(GameObject _oldBallObject, GameObject _ballObject)
-    {
-        //print("set ball");
-        ballObject = _ballObject;
-        //RespawnBallCmd();
-    }
-
-    void SetPlayerNum(int _oldNum, int _newNum)
-    {
-        playerNum = _newNum;
-    }
-
-    public int GetPlayerNum()
-    {
-        return playerNum;
-    }
-
     private void Update()
     {
         if (isLocalPlayer)
         {
+            //movement of paddle
             transform.Translate((Input.GetAxis("Horizontal") * paddleSpeed) * Time.deltaTime, 0, 0);
             transform.position = new Vector3(Mathf.Clamp(transform.position.x, -xAxisBoundary, xAxisBoundary), transform.position.y, transform.position.z);
 
@@ -87,26 +51,48 @@ public class PlayerScript : NetworkBehaviour
             }
         }
     }
+
+    private void OnTriggerStay(Collider other)
+    {
+        //if ball collides with paddle
+        if (other.CompareTag("Ball"))
+        {
+            other.GetComponent<BallScript>().BounceOffPaddle(gameObject.transform.position);
+        }
+    }
+
+    //spawn ball (on server)
+    [Command]
+    void SpawnBallCmd()
+    {
+        //spawn ball over network
+        GameObject _obj = Instantiate(ballPrefab, new Vector3(0, 0, 0), Quaternion.identity);
+        NetworkServer.Spawn(_obj);
+
+        //set properties of ball
+        SetBall(_obj, _obj);
+        ballObject.GetComponent<BallScript>().SetPlayerScript(null, this);
+    }
+
+    //set reference to players ball
+    public void SetBall(GameObject _oldBallObject, GameObject _ballObject)
+    {
+        ballObject = _ballObject;
+        //RespawnBallCmd();
+    }
+
+    //Space Pressed (server to client)
     [ClientRpc]
     public void SpacePressedClnt()
     {
         canStartGame = false;
         ballObject.GetComponent<BallScript>().StartGame();
     }
+    //Space Pressed (client to server)
     [Command]
     public void SpacePressedCmd()
     {
-        print("space command");
         SpacePressedClnt();
-    }
-
-    private void OnTriggerStay(Collider other)
-    {
-        //if ball collides with paddle
-        if(other.CompareTag("Ball"))
-        {
-            other.GetComponent<BallScript>().BounceOffPaddle(gameObject.transform.position);
-        }
     }
 
     [Command]

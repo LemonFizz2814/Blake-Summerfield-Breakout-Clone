@@ -24,7 +24,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1905083194298361134}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.5, z: 0}
+  m_LocalPosition: {x: 0, y: 0.6, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1905083194490992702}
@@ -83,7 +83,7 @@ MonoBehaviour:
   syncInterval: 0.1
   paddleSpeed: 10
   xAxisBoundary: 7.5
-  playerHeightOffset: 1
+  playerHeightOffset: 1.2
   ballPrefab: {fileID: 6938499597616393523, guid: 251b3a92df02a7a459874e5fd6769226, type: 3}
   ballSpawnPos: {fileID: 1905083194298361134}
 --- !u!65 &1905083194490992701
@@ -97,7 +97,7 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 2.72, y: 0.4, z: 1}
+  m_Size: {x: 2.9, y: 0.5, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!65 &1905083194490992697
 BoxCollider:
@@ -110,7 +110,7 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 2.6, y: 0.25, z: 1}
+  m_Size: {x: 2.8, y: 0.4, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &151384939
 MonoBehaviour:
@@ -184,7 +184,7 @@ Transform:
   m_GameObject: {fileID: 8562752764391977013}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 3.3, y: 3.3, z: 1.1059}
+  m_LocalScale: {x: 7, y: 10, z: 2.3746967}
   m_Children: []
   m_Father: {fileID: 1905083194490992702}
   m_RootOrder: 1
@@ -229,7 +229,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 1
-  m_Sprite: {fileID: 21300000, guid: 50ca55c4fc493184ca23c0dc9c751b7e, type: 3}
+  m_Sprite: {fileID: 21300000, guid: c07208d8a9b0b3045b0d62517d4832f6, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
