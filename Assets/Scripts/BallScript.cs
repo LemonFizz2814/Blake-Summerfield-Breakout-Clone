@@ -6,6 +6,7 @@ using Mirror;
 public class BallScript : NetworkBehaviour
 {
     [SerializeField] float ballSpeed;
+    [Tooltip("rotation of ball when it first is fired")]
     [SerializeField] float startRotateAngle;
 
     [SyncVar] float startRot;
@@ -28,7 +29,6 @@ public class BallScript : NetworkBehaviour
         }
     }
 
-
     void Update()
     {
         //move ball forward direction
@@ -41,7 +41,7 @@ public class BallScript : NetworkBehaviour
             //if is server then update position
             if (isServer && playerScript != null)
             {
-                transform.position = playerScript.transform.GetChild(0).position;
+                transform.position = playerScript.GetBallSpawnPos().transform.position;
             }
         }
     }
@@ -51,7 +51,8 @@ public class BallScript : NetworkBehaviour
         //ball exited into red zone
         if (other.gameObject.CompareTag("OutOfBounds"))
         {
-            playerScript.RespawnBallCmd();
+            RespawnPosition();
+            //playerScript.RespawnBallCmd();
         }
     }
 
@@ -70,6 +71,13 @@ public class BallScript : NetworkBehaviour
             BounceOffObject(collision.contacts[0]);
             collision.gameObject.GetComponent<BrickScript>().CollideWithBall();
         }
+    }
+
+    void RespawnPosition()
+    {
+        FreezeBall(true);
+        transform.localPosition = playerScript.GetBallSpawnPos().transform.localPosition;
+        playerScript.SetCanStartGame(true, true);
     }
 
     //set player scripts reference to this script

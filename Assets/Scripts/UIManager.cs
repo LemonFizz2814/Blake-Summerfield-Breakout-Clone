@@ -12,7 +12,7 @@ public class UIManager : NetworkBehaviour
 
     private void Start()
     {
-        //set resolution
+        //set resolution of game view on build
         Screen.SetResolution(1920, 1080, FullScreenMode.FullScreenWindow);
 
         UpdateScoreText();

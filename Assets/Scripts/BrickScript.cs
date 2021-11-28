@@ -14,7 +14,6 @@ public class BrickScript : NetworkBehaviour
     private void Start()
     {
         SetBrickManager(GameObject.FindGameObjectWithTag("BrickManager").GetComponent<BrickManager>());
-        //spriteRenderer.color = brickColour;
         gameObject.SetActive(isActive);
     }
 

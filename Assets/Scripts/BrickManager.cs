@@ -43,10 +43,12 @@ public class BrickManager : NetworkBehaviour
         }
         else //if using auto generator
         {
+            //loop through rows and columns of bricks
             for (int i = 0; i < amountOfRows; i++)
             {
                 for (int j = 0; j < bricksPerRow; j++)
                 {
+                    //generate bricks
                     GameObject brickObj = Instantiate(brickPrefab, new Vector3(j * brickHorizSpacing + startingPos.x, i * rowVertSpacing + startingPos.y, 0), Quaternion.identity);
                     brickObj.transform.SetParent(transform);
                 }

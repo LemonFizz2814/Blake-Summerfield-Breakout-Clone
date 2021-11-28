@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine.SceneManagement;
 using UnityEngine;
 using UnityEngine.Networking;
 using Mirror;
@@ -8,7 +7,9 @@ using Mirror;
 public class PlayerScript : NetworkBehaviour
 {
     [SerializeField] float paddleSpeed;
+    [Tooltip("set x axis boundary for paddle so it can't move out of bounds")]
     [SerializeField] float xAxisBoundary;
+    [Tooltip("the distance in height between each player that spawns")]
     [SerializeField] float playerHeightOffset;
 
     int playerNum;
@@ -18,13 +19,15 @@ public class PlayerScript : NetworkBehaviour
     [SerializeField] GameObject ballPrefab;
     [SerializeField] GameObject ballSpawnPos;
 
-    [SyncVar] bool canStartGame = true;
+    [SyncVar(hook = "SetCanStartGame")] bool canStartGame = true;
 
     private void Start()
     {
-        print("PLAYER JOINED");
-
-        SpawnBallCmd();
+        //spawn ball on the network if is local
+        if (isLocalPlayer)
+        {
+            SpawnBallCmd();
+        }
 
         playerNum = GameObject.FindGameObjectsWithTag("Player").Length - 1;
         transform.position = new Vector3(transform.position.x, transform.position.y + (playerNum * playerHeightOffset), transform.position.z);
@@ -40,14 +43,7 @@ public class PlayerScript : NetworkBehaviour
             //when space pressed, start game and move ball
             if (Input.GetKeyDown(KeyCode.Space) && canStartGame)
             {
-                print("space pressed");
                 SpacePressedCmd();
-            }
-
-            //when R pressed, restart scene
-            if (Input.GetKeyDown(KeyCode.R))
-            {
-                //SceneManager.LoadScene(SceneManager.GetActiveScene().name);
             }
         }
     }
@@ -59,6 +55,12 @@ public class PlayerScript : NetworkBehaviour
         {
             other.GetComponent<BallScript>().BounceOffPaddle(gameObject.transform.position);
         }
+    }
+
+    //get spawn position for ball
+    public GameObject GetBallSpawnPos()
+    {
+        return ballSpawnPos;
     }
 
     //spawn ball (on server)
@@ -78,14 +80,18 @@ public class PlayerScript : NetworkBehaviour
     public void SetBall(GameObject _oldBallObject, GameObject _ballObject)
     {
         ballObject = _ballObject;
-        //RespawnBallCmd();
+    }
+    //set reference to players ball
+    public void SetCanStartGame(bool _oldActive, bool _active)
+    {
+        canStartGame = _active;
     }
 
     //Space Pressed (server to client)
     [ClientRpc]
     public void SpacePressedClnt()
     {
-        canStartGame = false;
+        SetCanStartGame(canStartGame, false);
         ballObject.GetComponent<BallScript>().StartGame();
     }
     //Space Pressed (client to server)
@@ -93,23 +99,5 @@ public class PlayerScript : NetworkBehaviour
     public void SpacePressedCmd()
     {
         SpacePressedClnt();
-    }
-
-    [Command]
-    public void RespawnBallCmd()
-    {
-        RespawnBallClnt();
-    }
-
-
-    [ClientRpc]
-    public void RespawnBallClnt()
-    {
-        //print("respawn");
-        ballObject.GetComponent<BallScript>().FreezeBall(true);
-        ballObject.transform.localPosition = ballSpawnPos.transform.localPosition;
-        //ballObject.transform.SetParent(transform, false);
-
-        canStartGame = true;
     }
 }
